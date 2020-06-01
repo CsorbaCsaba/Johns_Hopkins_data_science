@@ -1,0 +1,36 @@
+library(data.table)
+
+#set the working directory
+Rfile <- file.choose()
+wd <- dirname(Rfile)
+
+setwd(wd)
+dir()
+
+list.files(file.path(wd,"data"))
+
+# calculate the required memory
+# rows * columns * data(i.e.:8bytes/numeric)
+round(2075259*9*8/2^{20},2)
+# 142,5 Mb
+
+
+df <- fread("./data/household_power_consumption.txt", na.strings = "?")
+df <- subset(df, 
+             as.Date(Date, format = "%d/%m/%Y") == as.Date("2007-02-01") | 
+             as.Date(Date, format = "%d/%m/%Y") == as.Date("2007-02-02"))
+head(df)
+summary(df)
+sapply(df, class)
+df$DayTime <- as.POSIXct(paste(df$Date, df$Time), format = "%d/%m/%Y %H:%M:%S")
+str(df)
+
+png("./output/plot2.png", width = 480, height = 480)
+
+with(df, plot(DayTime, Global_active_power, 
+              type = "l", 
+              xlab = "", 
+              ylab = "Global Active Power (kilowatts)"))
+
+dev.off()
+
