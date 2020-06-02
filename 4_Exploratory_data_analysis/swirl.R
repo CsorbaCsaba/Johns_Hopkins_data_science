@@ -193,3 +193,35 @@ plot(airquality$Temp, airquality$Ozone, main = "Ozone and Temperature")
 
 mtext("Ozone and Weather in New York City", outer = TRUE)
 
+
+
+
+
+
+
+########################
+
+## GGPLOT2
+
+########################
+
+str(mpg)
+qplot(displ, hwy, data = mpg, color = drv, 
+      geom = c("point", "smooth") )
+
+qplot(y=hwy, data = mpg, color = drv)
+myhigh
+
+
+qplot(drv, hwy, data = mpg, 
+      geom = "boxplot",
+      color = manufacturer)
+
+
+qplot(hwy, data = mpg, fill = drv)
+
+
+qplot(displ, hwy, data = mpg, facets = .~drv)
+qplot(hwy, data = mpg, facets = drv~., 
+      binwidth=2)
+
