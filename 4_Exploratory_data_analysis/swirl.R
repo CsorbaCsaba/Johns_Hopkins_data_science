@@ -225,3 +225,284 @@ qplot(displ, hwy, data = mpg, facets = .~drv)
 qplot(hwy, data = mpg, facets = drv~., 
       binwidth=2)
 
+
+
+################
+
+## ggplot2 building blocks
+
+## DATA FRAME which contains the data you're trying to plot. 
+## The AESTHETIC MAPPINGS determine how data are
+## mapped to color, size, etc. 
+## The GEOMS (geometric objects) are what you see in the plot 
+## (points, lines, shapes) and FACETS are the panels 
+## used in conditional plots.
+## STATS are statistical transformations such as
+## binning, quantiles, and smoothing which ggplot2 applies to the
+## data. 
+## SCALES show what coding an aesthetic map uses (for example,
+## male = red, female = blue). Finally, the plots are depicted 
+## on a COORDINATE SYSTEM. 
+
+## When you use qplot these were taken care of for you.
+
+################
+
+
+qplot(displ, hwy, data = mpg, geom = c("point","smooth"), 
+      facets = .~drv)
+
+g <- ggplot(mpg, aes(displ, hwy))
+summary(g)
+print(g)
+## Note that if you tried to print g with the expressions g or
+## print(g) you'd get an error! Even though it's a great package,
+## ggplot doesn't know how to display the data yet since you 
+## didn't specify how you wanted to see it.
+
+g + geom_point()
+g + geom_point() + geom_smooth()
+g + geom_point() + geom_smooth(mapping = "lm")
+g + geom_point() + geom_smooth(method = "lm")
+g + geom_point() + geom_smooth(method = "lm") + facet_grid(.~drv)
+
+g + geom_point() + 
+  geom_smooth(method = "lm") + 
+  facet_grid(.~drv) + 
+  ggtitle("Swirl Rules!")
+
+g + geom_point(color = "pink", size = 4, alpha = 1/2)
+
+g + geom_point(size = 4, alpha = 1/2, aes(color = drv))
+
+g + geom_point(aes(color = drv)) + labs(title="Swirl Rules!") + 
+  labs(x="Displacement", y="Hwy Mileage")
+
+g + geom_point(aes(color=drv), size = 2, alpha = 1/2) + 
+  geom_smooth(size = 4, linetype = 3, method = "lm", se = FALSE)
+
+g + geom_point(aes(color=drv)) + theme_bw(base_family = "Times")
+
+
+plot(myx, myy, type = "l", ylim = c(-3,3))
+
+g <- ggplot(testdat, aes(myx, myy))
+
+g + geom_line()
+g + geom_line() + ylim(-3,3)
+## ggplot simply ignored the outlier point at (50,100). 
+## There's a break in the line which isn't very noticeable. 
+## Now recall that at the beginning of the lesson we mentioned 
+## 7 components of a ggplot plot, one of which was a coordinate 
+## system. This is a situation where using a coordinate system 
+## would be helpful
+g + geom_line() + coord_cartesian(ylim = c(-3,3))
+
+g <- ggplot(mpg, aes(displ, hwy, color = factor(year)))
+g + geom_point()
+g + geom_point() + facet_grid(drv~cyl, margins = TRUE)
+g + geom_point() + facet_grid(drv~cyl, margins = TRUE) + 
+  geom_smooth(method = "lm", se = FALSE, size = 2, color = "black")
+
+g + geom_point() + facet_grid(drv~cyl, margins = TRUE) + 
+  geom_smooth(method = "lm", se = FALSE, size = 2, color = "black") +
+  labs(x="Displacement", y="Highway Mileage", title = "Swirl Rules!")
+
+
+
+
+str(diamonds)
+qplot(price, data = diamonds)
+range(diamonds$price)
+qplot(price, data = diamonds, binwidth = 18497/30)
+brk
+counts
+
+qplot(price, data = diamonds, binwidth = 18497/30, fill = cut)
+qplot(price, data = diamonds, geom = "density")
+qplot(price, data = diamonds, geom = "density", color = cut)
+
+qplot(carat, price, data = diamonds)
+qplot(carat, price, data = diamonds, shape = cut)
+qplot(carat, price, data = diamonds, color = cut)
+qplot(carat, price, data = diamonds, color = cut) + geom_smooth(method = "lm")
+qplot(carat,price,data=diamonds, color=cut, facets=.~cut) + 
+  geom_smooth(method="lm")
+
+
+g <- ggplot(diamonds, aes(depth, price))
+summary(g)
+g + geom_point(alpha = 1/3)
+cutpoints <- quantile(diamonds$carat, seq(0,1,length=4), na.rm = TRUE)
+cutpoints
+diamonds$car2 <- cut(diamonds$carat, cutpoints)
+
+g <- ggplot(data = diamonds, aes(depth, price))
+g + geom_point(alpha = 1/3) + facet_grid(cut ~ car2)
+diamonds[myd,]
+
+g + geom_point(alpha = 1/3) + facet_grid(cut ~ car2) + 
+  geom_smooth(method = "lm", size = 3, color = "pink")
+
+ggplot(diamonds, aes(carat, price)) + geom_boxplot() + 
+  facet_grid(.~cut)
+
+
+
+
+
+############################
+
+## Hierarchical clustering
+
+## http://en.wikipedia.org/wiki/Hierarchical_clustering
+## http://en.wikipedia.org/wiki/Heat_map
+## http://sebastianraschka.com/Articles/heatmaps_in_r.html#clustering
+
+
+############################
+
+dist(dataFrame)
+hc <- hclust(distxy)
+plot(hc)
+plot(as.dendrogram(hc))
+abline(h=1.5, col = "blue")
+abline(h=0.4, col="red")
+abline(h=0.08, col="green")
+dist(dFsm)
+hc
+
+heatmap(dataMatrix, col = cm.colors(25))
+
+heatmap(mt)
+mt
+distmt
+
+
+
+
+
+
+############################
+
+## K_Means_Clustering
+
+############################
+cmat
+points(cx, cy, col = c("red", "orange", "purple"), pch = 3,
+       cex = 2, lwd = 2)
+
+mdist(x,y, cx, cy)
+apply(distTmp, 2, which.min)
+
+
+points(x,y, pch=19, cex=2, col=cols1[newClust])
+tapply(x, newClust, mean)
+tapply(y, newClust, mean)
+points(newCx, newCy, col=cols1, pch=8, cex=2,  lwd=2)
+mdist(x,y,newCx, newCy)
+
+apply(distTmp2, 2, which.min)
+points(x,y,pch=19, cex=2, col=cols1[newClust2])
+tapply(x,newClust2,mean)
+tapply(y,newClust2,mean)
+points(finalCx, finalCy, col=cols1, pch=9, cex=2, lwd=2)
+
+kmeans(dataFrame, centers = 3)
+kmObj$iter
+
+plot(x, y, col = kmObj$cluster, pch = 19, cex = 2)
+points(kmObj$centers, col=c("black","red","green"), pch=3,
+       cex=3, lwd=3)
+
+plot(x,y,col=kmeans(dataFrame,6)$cluster, pch=19, cex=2)
+plot(x,y,col=kmeans(dataFrame,6)$cluster,pch=19,cex=2)
+
+
+
+
+############################
+
+## Dimension_Reduction
+
+############################
+
+head(dataMatrix)
+heatmap(dataMatrix)
+myedit("addPatt.R")
+
+source("addPatt.R", local=TRUE)
+svd(mat)
+matu %*% diag %*% t(matv)
+svd(scale(mat))
+scale(mat)
+prcomp(scale(mat))
+svd1$d
+head(constantMatrix)
+svd2
+svd2$v[,1:2]
+svd2$d
+dim(faceData)
+a1 <- (svd1$u[,1] * svd1$d[1]) %*% t(svd1$v[,1])
+#a1 <- svd1$u[,1] %*% t(svd1$v[,1]) * svd1$d[1]
+myImage(a1)
+a2 <- svd1$u[,1:2] %*% diag(svd1$d[1:2]) %*% t(svd1$v[,1:2])
+myImage(a2)
+myImage(svd1$u[,1:5] %*% diag(svd1$d[1:5]) %*% t(svd1$v[,1:5]))
+myImage(svd1$u[,1:10] %*% diag(svd1$d[1:10]) %*% t(svd1$v[,1:10]))
+
+
+
+
+
+############################
+
+## Clustering_Example
+
+############################
+dim(ssd)
+names(ssd[,562:563])
+table(ssd$subject)
+
+sum(table(ssd$subject))
+table(ssd$activity)
+
+sub1 <- subset(ssd, subject == 1)
+dim(sub1)
+names(sub1[,1:12])
+
+myedit("showXY.R")
+showMe(1:6)
+mdist <- dist(sub1[,1:3])
+hclustering <- hclust(mdist)
+myplclust(hclustering, lab.col = unclass(sub1$activity))
+
+mdist <- dist(sub1[,10:12])
+hclustering <- hclust(mdist)
+myplclust(hclustering, lab.col = unclass(sub1$activity))
+
+svd1 <- svd(scale(sub1[,-c(562,563)]))
+dim(svd1$u)
+maxCon <- which.max(svd1$v[,2])
+mdist <- dist(sub1[,c(10:12,maxCon)])
+hclustering <- hclust(mdist)
+myplclust(hclustering, lab.col = unclass(sub1$activity))
+
+
+names(sub1[maxCon])
+
+kClust <- kmeans(sub1[,-c(562,563)], centers = 6)
+table(kClust$cluster,sub1$activity)
+
+kClust <- kmeans(sub1[,-c(562,563)], centers = 6, nstart = 100)
+table(kClust$cluster,sub1$activity)
+
+dim(kClust$centers)
+
+laying <- which(kClust$size==29)
+plot(kClust$centers[laying,1:12], pch=19, ylab="Laying Cluster")
+names(sub1[,1:3])
+
+walkdown <- which(kClust$size==49)
+plot(kClust$centers[walkdown,1:12], pch=19, ylab="Walkdown Cluster")
+
