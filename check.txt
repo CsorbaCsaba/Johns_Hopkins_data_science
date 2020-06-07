@@ -1,0 +1,10 @@
+?transform
+?with
+?which
+?make.names
+?segments
+
+find na
+find TRUE/FALSE
+
+?apply/tapply/sapply
